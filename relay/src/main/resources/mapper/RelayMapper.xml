@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hongfa.app.relay.dao.RelayDao">
+<resultMap id="relayMap" type="com.hongfa.app.relay.entity.Relay">
+    <result column="relay_id" property="relayId"/>
+    <result column="relay_type_name" property="relayTypeName"/>
+    <result column="relay_model" property="relayModel"/>
+    <result column="relay_img" property="relayImg"/>
+    <result column="relay_max_current" property="relayMaxCurrent"/>
+    <result column="relay_max_current_unit" property="relayMaxCurrentUnit"/>
+    <result column="relay_contact_from" property="relayContactFrom"/>
+    <result column="relay_coil_voltage" property="relayCoilVoltage"/>
+    <result column="relay_coil_voltage_type" property="relayCoilVoltageType"/>
+    <result column="relay_leadout_mode" property="relayLeadoutMode"/>
+    <result column="relay_leadout_mode_code" property="relayLeadoutModeCode"/>
+    <result column="relay_mount_holemap" property="relayMountHolemap"/>
+</resultMap>
+    <sql id="realy">
+        re.relay_id,ret.relay_type_name,re.relay_model,re.relay_img,re.relay_max_current,re.relay_max_current_unit,
+        re.relay_contact_from,re.relay_coil_voltage,re.relay_coil_voltage_type,re.relay_leadout_mode,
+        re.relay_leadout_mode_code,re.relay_mount_holemap
+    </sql>
+<select id="findRelay" parameterType="com.hongfa.app.relay.param.RelayRequest" resultMap="relayMap">
+    select
+   <include refid="realy"/>
+    from h_relay re join h_relaytype ret
+    on re.relay_type_id=ret.relay_type_id
+    and ret.relay_type_id=#{relayTypeId}
+    and ret.relay_type_name=#{relayTypeName}
+    limit #{limit} offset #{offset}
+</select>
+<select id="findRelayCount" parameterType="com.hongfa.app.relay.param.RelayRequest">
+    select count(1)
+    from h_relay re join h_relaytype ret
+    on re.relay_type_id=ret.relay_type_id
+    and ret.relay_type_id=#{relayTypeId}
+    and ret.relay_type_name=#{relayTypeName}
+</select>
+</mapper>
